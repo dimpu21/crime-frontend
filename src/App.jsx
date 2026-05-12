@@ -87,6 +87,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const [riskyPoints, setRiskyPoints] = useState([]);
+  const [riskLevel, setRiskLevel] = useState("Low");
 
   // ✅ Safe route
   const [route, setRoute] = useState([]);
@@ -161,6 +162,42 @@ function App() {
           .then(data => {
 
             setRisk(data.risk);
+            const dangerZones = [
+  {
+    lat: 12.9716,
+    lng: 77.5946,
+    radius: 0.01
+  },
+  {
+    lat: 12.9352,
+    lng: 77.6245,
+    radius: 0.01
+  }
+];
+
+dangerZones.forEach((zone) => {
+
+  const distance =
+    Math.sqrt(
+      Math.pow(lat - zone.lat, 2) +
+      Math.pow(lng - zone.lng, 2)
+    );
+
+  if (distance < zone.radius) {
+
+    setRisk("High");
+
+    setShowDanger(true);
+
+    setFullscreenAlert(true);
+
+    audioRef.current.play();
+
+    toast.error(
+      "🚨 HIGH RISK AREA DETECTED"
+    );
+  }
+});
 
             // 🔥 HIGH RISK
             if (data.risk === "High") {
