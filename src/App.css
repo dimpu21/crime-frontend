@@ -1,0 +1,181 @@
+.container{
+
+  display:flex;
+
+  width:100%;
+
+  height:100%;
+
+  overflow:hidden;
+
+  background:black;
+}
+
+.map {
+  width: 70%;
+}
+
+.panel {
+  width: 25%;
+  background: #0b0b0b;   /* slightly lighter than pure black */
+  color: white;
+  padding: 25px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 30px;
+  color: white;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 14px 26px;
+  margin: 10px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.start {
+  background: #0bbd2c;
+  color: white;
+}
+
+.stop {
+  background: red;
+  color: white;
+}
+
+.risk {
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 25px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.risk.high {
+  background: #ff1a1a;
+}
+
+.risk.low {
+  background: #0bbd2c;
+}
+
+/* 🔴 TOP ALERT BANNER */
+.danger-banner {
+  position: absolute;
+  top: 20px;
+  left: 35%;
+  transform: translateX(-50%);
+  background: red;
+  color: white;
+  padding: 14px 28px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  z-index: 999;
+
+  box-shadow: 0 0 20px red;
+}
+
+/* message */
+.message {
+  margin-top: 20px;
+  font-size: 18px;
+}
+.icon {
+  margin-right: 10px;
+  text-shadow:
+    0 0 10px red,
+    0 0 20px red,
+    0 0 30px red;
+}
+.title {
+  font-size: 34px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+
+  /* clean glow like before (not overkill) */
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+}
+.legend {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.legend span {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border-radius: 50%;
+}
+
+.legend .low { background: green; }
+.legend .medium { background: orange; }
+.legend .high { background: red; }
+.stats {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ccc;
+}
+.emergency-overlay{
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:red;
+  z-index:9999;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  animation: blinkBg 1s infinite;
+}
+
+@keyframes blinkBg{
+  0%{
+    background:#ff0000;
+  }
+
+  50%{
+    background:#5c0000;
+  }
+
+  100%{
+    background:#ff0000;
+  }
+}
+
+.emergency-box{
+  text-align:center;
+  color:white;
+}
+
+.emergency-box h1{
+  font-size:60px;
+  margin-bottom:20px;
+}
+
+.emergency-box p{
+  font-size:30px;
+  margin:10px 0;
+}
+
+.emergency-box button{
+  margin-top:30px;
+  padding:15px 40px;
+  font-size:22px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}

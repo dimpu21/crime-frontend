@@ -1,0 +1,9 @@
+# Query: 127.0.0.1:5000
+# ContextLines: 1
+
+1 result - 1 file
+
+major project • .ipynb_checkpoints\app-checkpoint.py:
+  60  if __name__ == '__main__':
+  61:     webbrowser.open_new("http://10.128.119.215:5000")
+  62      app.run(debug=True)
