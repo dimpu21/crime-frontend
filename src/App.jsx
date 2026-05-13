@@ -181,7 +181,12 @@ useEffect(() => {
           lat: 12.9352,
           lng: 77.6245,
           radius: 0.05
-        }
+        },
+        {
+  lat: 13.0117,
+  lng: 77.5690,
+  radius: 0.05
+}
       ];
 
       let isDanger = false;
@@ -370,7 +375,11 @@ url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"            />
             <HeatmapLayer hotspots={hotspots} />
 
             {/* 🔥 User Marker */}
-            <Marker position={position} />
+            <Marker position={position}>
+  <Popup>
+    📍 Your Live Location
+  </Popup>
+</Marker>
           {/* 📍 Live User Marker */}   
 {/* 🟢 / 🔴 Live Risk Circle */}
 <Circle
