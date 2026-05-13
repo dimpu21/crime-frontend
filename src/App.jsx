@@ -246,8 +246,7 @@ dangerZones.forEach((zone) => {
           .catch(err => console.log(err));
       },
 
-      (err) => console.log(err),
-
+      (err) => console.log(err)
       {
         enableHighAccuracy: true
       }
