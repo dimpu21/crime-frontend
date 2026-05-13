@@ -109,17 +109,15 @@ function App() {
   // 🔥 Load heatmap
   useEffect(() => {
 
-    fetch("http://10.222.223.215:5000/heatmap")
-      .then(res => res.json())
-      .then(data => {
+    // fetch("http://10.222.223.215:5000/heatmap")
+//   .then(res => res.json())
+//   .then(data => {
+//     setHotspots(data);
+//     setLoading(false);
+//   })
+      //.catch(err => console.log(err));
 
-        setHotspots(data);
-        setLoading(false);
-
-      })
-      .catch(err => console.log(err));
-
-  }, []);
+  //}, []);
 
   // 🔥 Enable sound manually once
   const enableSound = () => {
@@ -142,11 +140,16 @@ function App() {
     watchRef.current = navigator.geolocation.watchPosition(
 
       (pos) => {
+        if (!pos || !pos.coords) {
+    console.log("GPS unavailable");
+    return;
+  }
+
         console.log("Tracking started");
 
-console.log("Latitude:", position.coords.latitude);
+console.log("Latitude:", pos?.coords?.latitude);
 
-console.log("Longitude:", position.coords.longitude);
+console.log("Longitude:", pos?.coords?.longitude);
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         console.log("LIVE LOCATION:", lat, lng);
@@ -159,17 +162,17 @@ audioRef.current.play();
 alert("DANGER AREA DETECTED");
         setPosition([lat, lng]);
 
-        fetch("http://10.222.223.215:5000/check-risk", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ lat, lng })
-        })
+        //fetch("http://10.222.223.215:5000/check-risk", {
+          //method: "POST",
+          //headers: {
+           // "Content-Type": "application/json"
+          //},
+          //body: JSON.stringify({ lat, lng })
+        //})
 
-          .then(res => res.json())
+         // .then(res => res.json())
 
-          .then(data => {
+         // .then(data => {
 
             setRisk(data.risk);
             const dangerZones = [
@@ -248,10 +251,10 @@ dangerZones.forEach((zone) => {
       {
         enableHighAccuracy: true
       }
-    );
+    //);
 
     setTracking(true);
-  };
+    });
 
   // 🔥 Stop tracking
   const stopTracking = () => {
@@ -276,7 +279,7 @@ dangerZones.forEach((zone) => {
     try {
 
       const res = await fetch(
-        "http://10.222.223.215:5000/safe-route",
+        //"http://10.222.223.215:5000/safe-route",
         {
           method: "POST",
           headers: {
