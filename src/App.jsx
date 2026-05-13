@@ -107,17 +107,18 @@ function App() {
   }, []);
 
   // 🔥 Load heatmap
-  useEffect(() => {
+  // 🔥 Load heatmap
+useEffect(() => {
 
-    // fetch("http://10.222.223.215:5000/heatmap")
-//   .then(res => res.json())
-//   .then(data => {
-//     setHotspots(data);
-//     setLoading(false);
-//   })
-      //.catch(err => console.log(err));
+  // fetch("http://10.222.223.215:5000/heatmap")
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     setHotspots(data);
+  //     setLoading(false);
+  //   })
+  //   .catch(err => console.log(err));
 
-  //}, []);
+}, []);
 
   // 🔥 Enable sound manually once
   const enableSound = () => {
@@ -137,123 +138,95 @@ function App() {
   // 🔥 Start tracking
   const startTracking = () => {
 
-    watchRef.current = navigator.geolocation.watchPosition(
+  watchRef.current = navigator.geolocation.watchPosition(
 
-      (pos) => {
-        if (!pos || !pos.coords) {
-    console.log("GPS unavailable");
-    return;
-  }
+    (pos) => {
 
-        console.log("Tracking started");
-
-console.log("Latitude:", pos?.coords?.latitude);
-
-console.log("Longitude:", pos?.coords?.longitude);
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        console.log("LIVE LOCATION:", lat, lng);
-setShowDanger(true);
-
-setFullscreenAlert(true);
-
-audioRef.current.play();
-
-alert("DANGER AREA DETECTED");
-        setPosition([lat, lng]);
-
-        //fetch("http://10.222.223.215:5000/check-risk", {
-          //method: "POST",
-          //headers: {
-           // "Content-Type": "application/json"
-          //},
-          //body: JSON.stringify({ lat, lng })
-        //})
-
-         // .then(res => res.json())
-
-         // .then(data => {
-
-            setRisk(data.risk);
-            const dangerZones = [
-  {
-    lat: 12.9716,
-    lng: 77.5946,
-    radius: 10
-  },
-  {
-    lat: 12.9352,
-    lng: 77.6245,
-    radius: 10
-  }
-];
-
-dangerZones.forEach((zone) => {
-
-  const distance =
-    Math.sqrt(
-      Math.pow(lat - zone.lat, 2) +
-      Math.pow(lng - zone.lng, 2)
-    );
-
-  if (distance < zone.radius) {
-
-    setRisk("High");
-
-    setShowDanger(true);
-
-    setFullscreenAlert(true);
-
-    audioRef.current.play();
-
-    toast.error(
-      "🚨 HIGH RISK AREA DETECTED"
-    );
-  }
-});
-
-            // 🔥 HIGH RISK
-            if (data.risk === "High") {
-
-              setShowDanger(true);
-
-              setFullscreenAlert(true);
-
-              // 🔥 PLAY SIREN
-              audioRef.current.play();
-
-              // 🔥 PHONE VIBRATION
-              if (navigator.vibrate) {
-
-                navigator.vibrate([
-                  1000,
-                  500,
-                  1000,
-                  500,
-                  1000
-                ]);
-              }
-
-              toast.error("🚨 HIGH RISK AREA DETECTED");
-              
-
-              setTimeout(() => {
-                setShowDanger(false);
-              }, 3000);
-            }
-          })
-
-          .catch(err => console.log(err));
-      },
-
-      (err) => console.log(err)
-      {
-        enableHighAccuracy: true
+      if (!pos || !pos.coords) {
+        console.log("GPS unavailable");
+        return;
       }
-    //);
 
-    setTracking(true);
-    });
+      console.log("Tracking started");
+
+      console.log("Latitude:", pos.coords.latitude);
+      console.log("Longitude:", pos.coords.longitude);
+
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      console.log("LIVE LOCATION:", lat, lng);
+
+      setPosition([lat, lng]);
+
+      const dangerZones = [
+        {
+          lat: 12.9716,
+          lng: 77.5946,
+          radius: 0.01
+        },
+        {
+          lat: 12.9352,
+          lng: 77.6245,
+          radius: 0.01
+        }
+      ];
+
+      let isDanger = false;
+
+      dangerZones.forEach((zone) => {
+
+        const distance = Math.sqrt(
+          Math.pow(lat - zone.lat, 2) +
+          Math.pow(lng - zone.lng, 2)
+        );
+
+        if (distance < zone.radius) {
+
+          isDanger = true;
+
+          setRisk("High");
+
+          setShowDanger(true);
+
+          setFullscreenAlert(true);
+
+          audioRef.current.play();
+
+          toast.error("🚨 HIGH RISK AREA DETECTED");
+
+          if (navigator.vibrate) {
+            navigator.vibrate([
+              1000,
+              500,
+              1000
+            ]);
+          }
+
+          setTimeout(() => {
+            setShowDanger(false);
+          }, 3000);
+        }
+      });
+
+      if (!isDanger) {
+        setRisk("Low");
+      }
+
+    },
+
+    (err) => {
+      console.log(err);
+    },
+
+    {
+      enableHighAccuracy: true
+    }
+
+  );
+
+  setTracking(true);
+};
 
   // 🔥 Stop tracking
   const stopTracking = () => {
@@ -653,5 +626,6 @@ url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"            />
     </>
   );
 }
+
 
 export default App;
