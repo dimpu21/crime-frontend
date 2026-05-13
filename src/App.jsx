@@ -142,11 +142,21 @@ function App() {
     watchRef.current = navigator.geolocation.watchPosition(
 
       (pos) => {
+        console.log("Tracking started");
 
+console.log("Latitude:", position.coords.latitude);
+
+console.log("Longitude:", position.coords.longitude);
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         console.log("LIVE LOCATION:", lat, lng);
+setShowDanger(true);
 
+setFullscreenAlert(true);
+
+audioRef.current.play();
+
+alert("DANGER AREA DETECTED");
         setPosition([lat, lng]);
 
         fetch("http://10.222.223.215:5000/check-risk", {
@@ -166,12 +176,12 @@ function App() {
   {
     lat: 12.9716,
     lng: 77.5946,
-    radius: 0.01
+    radius: 10
   },
   {
     lat: 12.9352,
     lng: 77.6245,
-    radius: 0.01
+    radius: 10
   }
 ];
 
