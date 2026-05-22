@@ -268,7 +268,7 @@ useEffect(() => {
     try {
 
       const res = await fetch(
-        "http://127.0.0.1:5000/safe-route",
+        "http://10.222.223.215:5000/safe-route",
  {
           method: "POST",
           headers: {
