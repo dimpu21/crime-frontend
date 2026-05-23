@@ -148,101 +148,144 @@ useEffect(() => {
   };
 
   // 🔥 Start tracking
-  const startTracking = () => {
+  // 🔥 Start tracking
+const startTracking = () => {
 
-  watchRef.current = navigator.geolocation.watchPosition(
+  watchRef.current =
+    navigator.geolocation.watchPosition(
 
-    (pos) => {
+      (pos) => {
 
-      if (!pos || !pos.coords) {
-        console.log("GPS unavailable");
-        return;
-      }
+        if (!pos || !pos.coords) {
+          console.log("GPS unavailable");
+          return;
+        }
 
-      console.log("Tracking started");
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
-      console.log("Latitude:", pos.coords.latitude);
-      console.log("Longitude:", pos.coords.longitude);
+        console.log("LIVE LOCATION:", lat, lng);
 
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
+        setPosition([lat, lng]);
 
-      console.log("LIVE LOCATION:", lat, lng);
+        fetch(
+          "http://10.222.223.215:5000/check-risk",
+          {
+            method: "POST",
 
-      setPosition([lat, lng]);
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
 
-      const dangerZones = [
-        {
-          lat: 12.9716,
-          lng: 77.5946,
-          radius: 0.05
-        },
-        {
-          lat: 12.9352,
-          lng: 77.6245,
-          radius: 0.05
-        },
-        {
-  lat: 13.0117,
-  lng: 77.5690,
-  radius: 0.05
-}
-      ];
+            body: JSON.stringify({
+              lat,
+              lng
+            })
 
-      let isDanger = false;
+          }
+        )
 
-      dangerZones.forEach((zone) => {
+        .then((res) =>
+          res.json()
+        )
 
-        const distance = Math.sqrt(
-          Math.pow(lat - zone.lat, 2) +
-          Math.pow(lng - zone.lng, 2)
-        );
+        .then((data) => {
 
-        if (distance < zone.radius) {
+          console.log(
+            "Risk response:",
+            data
+          );
 
-          isDanger = true;
+          if (
+            data.risk ===
+            "High"
+          ) {
 
-          setRisk("High");
+            setRisk(
+              "High"
+            );
 
-          setShowDanger(true);
+            setRiskLevel(
+              "High"
+            );
 
-          setFullscreenAlert(true);
+            setShowDanger(
+              true
+            );
 
-          audioRef.current.play();
+            setFullscreenAlert(
+              true
+            );
 
-          toast.error("🚨 HIGH RISK AREA DETECTED");
+            toast.error(
+              "⚠ HIGH RISK AREA DETECTED!",
+              {
+                autoClose:
+                  5000
+              }
+            );
 
-          if (navigator.vibrate) {
-            navigator.vibrate([
-              1000,
-              500,
-              1000
-            ]);
+            window.alert(
+              "⚠ HIGH RISK AREA DETECTED!"
+            );
+
+            audioRef.current
+              ?.play()
+              .catch(
+                console.log
+              );
+
+          } else {
+
+            setRisk(
+              "Low"
+            );
+
+            setRiskLevel(
+              "Low"
+            );
+
+            setShowDanger(
+              false
+            );
+
           }
 
-          setTimeout(() => {
-            setShowDanger(false);
-          }, 3000);
-        }
-      });
+        })
 
-      if (!isDanger) {
-        setRisk("Low");
+        .catch(
+          (err) =>
+            console.log(
+              err
+            )
+        );
+
+      },
+
+      (err) => {
+        console.log(
+          err
+        );
+      },
+
+      {
+        enableHighAccuracy:
+          true,
+
+        timeout:
+          10000,
+
+        maximumAge:
+          0
       }
 
-    },
+    );
 
-    (err) => {
-      console.log(err);
-    },
-
-    {
-      enableHighAccuracy: true
-    }
-
+  setTracking(
+    true
   );
 
-  setTracking(true);
 };
 
   // 🔥 Stop tracking
@@ -646,7 +689,7 @@ url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"            />
       </div>
     </>
   );
+
+
 }
-
-
 export default App;
