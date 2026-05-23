@@ -5,7 +5,6 @@ import math
 import requests
 from telegram import Bot
 from flask_cors import CORS
-
 import firebase_admin
 from firebase_admin import credentials, db
 
@@ -36,13 +35,14 @@ LNG_COL = "LONGITUDE"
 
 # 🔥 Telegram setup
 CHAT_IDS = [
-    "8588859383",
-    "7448570124"
+    8588859383,
+    7448570124
 ]
 
 bot = Bot(
     token="8652883076:AAGGE9Bp-4YKS8qFGARkx7ihZAF9S-eDqI8"
 )
+print("Telegram initialized")
 
 last_alert_time = 0
 
@@ -115,9 +115,11 @@ def check_risk():
     current_time = time.time()
 
     # 🔥 SEND ALERTS
-    if risk == "High" and current_time - last_alert_time > 20:
-
+    if risk == "High":
+        print("ENTERED HIGH RISK BLOCK")
         print("HIGH RISK DETECTED")
+        print("CHAT_IDS:", CHAT_IDS)
+        print("SENDING TELEGRAM ALERT")
 
         try:
 
@@ -147,27 +149,26 @@ YOU HAVE ENTERED A HIGH RISK CRIME ZONE
 """
 
             print("SENDING TELEGRAM ALERT")
+            print("CHAT IDS:", CHAT_IDS)
+            print("MESSAGE:", telegram_message)
 
             # 🔥 Telegram Alerts
             for chat_id in CHAT_IDS:
 
                 try:
 
-                    bot.send_message(
+                    response = bot.send_message(
                         chat_id=chat_id,
-                        text=telegram_message
+                        text=telegram_message,
+                    
                     )
 
-                    print(
-                        f"Message sent to {chat_id}"
-                    )
+                    print("SUCCESS")
 
                 except Exception as e:
 
-                    print(
-                        f"Telegram error for "
-                        f"{chat_id}: {e}"
-                    )
+                    print(f"Telegram error for {chat_id}: {e}")
+                    
 
             print("TELEGRAM ALERT SENT")
 
@@ -241,6 +242,7 @@ def safe_route():
     try:
 
         req = request.get_json()
+        print("REQUEST RECEIVED:", req)
 
         start_lat = req['start_lat']
         start_lng = req['start_lng']

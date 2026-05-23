@@ -1,0 +1,9 @@
+Flask
+flask-cors
+pandas
+numpy
+requests
+python-telegram-bot
+firebase-admin
+scikit-learn
+gunicorn
