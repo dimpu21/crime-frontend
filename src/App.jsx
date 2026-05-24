@@ -402,9 +402,30 @@ const data = await res.json();
 
             <p>Move Away Immediately!</p>
 
-            <button onClick={stopEmergencyAlert}>
-              STOP ALERT
-            </button>
+            <button
+onClick={() => {
+
+setFullscreenAlert(false);
+
+setShowDanger(false);
+
+setTracking(false);
+
+setRisk("Low");
+
+setRiskLevel("Low");
+
+toast.dismiss();
+
+if(audioRef.current){
+audioRef.current.pause();
+audioRef.current.currentTime=0;
+}
+
+}}
+>
+STOP ALERT
+</button>
 
           </div>
 
