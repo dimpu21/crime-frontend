@@ -221,14 +221,13 @@ const startTracking = () => {
             toast.error(
               "⚠ HIGH RISK AREA DETECTED!",
               {
-                autoClose:
-                  5000
+                autoClose: false,
+      closeOnClick: false,
+      draggable: false
               }
             );
 
-            window.alert(
-              "⚠ HIGH RISK AREA DETECTED!"
-            );
+           
 
             audioRef.current
               ?.play()
