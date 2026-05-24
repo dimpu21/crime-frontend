@@ -217,6 +217,7 @@ const startTracking = () => {
             setFullscreenAlert(
               true
             );
+            
 
             toast.error(
               "⚠ HIGH RISK AREA DETECTED!",
@@ -245,9 +246,7 @@ const startTracking = () => {
               "Low"
             );
 
-            setShowDanger(
-              false
-            );
+            
 
           }
 
@@ -407,11 +406,6 @@ onClick={() => {
 
 setFullscreenAlert(false);
 
-setShowDanger(false);
-
-setTracking(false);
-
-setRisk("Low");
 
 
 toast.dismiss();
@@ -483,8 +477,9 @@ url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"            />
   center={position}
   radius={220}
   pathOptions={{
-    color: risk === "High" ? "#d32f2f" : "#2e7d32",
-    fillColor: risk === "High" ? "#ef5350" : "#66bb6a",
+    color: showDanger ? "#d32f2f" : "#2e7d32",
+
+fillColor: showDanger ? "#ef5350" : "#66bb6a",
     fillOpacity: 0.12,
     weight: 2
   }}
