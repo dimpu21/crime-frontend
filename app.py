@@ -6,6 +6,8 @@ import requests
 from telegram import Bot
 from flask_cors import CORS
 import firebase_admin
+import os
+import json
 from firebase_admin import credentials, db
 
 app = Flask(__name__)
@@ -15,11 +17,16 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 # 🔥 Firebase Initialization
 if not firebase_admin._apps:
 
-    cred = credentials.Certificate(
-        "firebase-key.json"
-    )
+    firebase_key = os.getenv("FIREBASE_KEY")
 
-    firebase_admin.initialize_app(
+if not firebase_key:
+    raise Exception("FIREBASE_KEY not found")
+
+firebase_config = json.loads(firebase_key)
+
+cred = credentials.Certificate(firebase_config)
+
+firebase_admin.initialize_app(
         cred,
         {
             "databaseURL":
