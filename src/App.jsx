@@ -360,18 +360,32 @@ const data = await res.json();
   // 🔥 Stop Emergency Alert
   const stopEmergencyAlert = () => {
 
+  // stop location tracking
+  navigator.geolocation.clearWatch(
+    watchRef.current
+  );
+
+  setTracking(false);
+
+  // close popup
   setFullscreenAlert(false);
 
   setShowDanger(false);
 
+  // reset risk
+  setRisk("Low");
+
+  setRiskLevel("Low");
+
+  // stop siren
   audioRef.current.pause();
 
   audioRef.current.currentTime = 0;
 
+  // remove toast
   toast.dismiss();
 
 };
-
   return (
     <>
 
