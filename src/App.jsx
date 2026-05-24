@@ -413,7 +413,6 @@ setTracking(false);
 
 setRisk("Low");
 
-setRiskLevel("Low");
 
 toast.dismiss();
 
