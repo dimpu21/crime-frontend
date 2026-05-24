@@ -215,7 +215,7 @@ const startTracking = () => {
             );
 
             setFullscreenAlert(
-              true
+              false
             );
 
             toast.error(
