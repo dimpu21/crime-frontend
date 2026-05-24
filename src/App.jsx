@@ -211,11 +211,11 @@ const startTracking = () => {
             );
 
             setShowDanger(
-              false
+              true
             );
 
             setFullscreenAlert(
-              false
+              true
             );
 
             toast.error(
@@ -290,14 +290,30 @@ const startTracking = () => {
   // 🔥 Stop tracking
   const stopTracking = () => {
 
-    navigator.geolocation.clearWatch(watchRef.current);
+  navigator.geolocation.clearWatch(
+    watchRef.current
+  );
 
-    setTracking(false);
+  setTracking(false);
 
-    audioRef.current.pause();
+  // stop siren
+  audioRef.current.pause();
+  audioRef.current.currentTime = 0;
 
-    audioRef.current.currentTime = 0;
-  };
+  // CLOSE ALERT SCREEN
+  setFullscreenAlert(false);
+
+  // remove danger banner
+  setShowDanger(false);
+
+  // reset risk
+  setRisk("Low");
+  setRiskLevel("Low");
+
+  // remove toast
+  toast.dismiss();
+
+};
 
   // 🔥 Safe Route
   const getSafeRoute = async () => {
@@ -344,12 +360,17 @@ const data = await res.json();
   // 🔥 Stop Emergency Alert
   const stopEmergencyAlert = () => {
 
-    setFullscreenAlert(true);
+  setFullscreenAlert(false);
 
-    audioRef.current.pause();
+  setShowDanger(false);
 
-    audioRef.current.currentTime = 0;
-  };
+  audioRef.current.pause();
+
+  audioRef.current.currentTime = 0;
+
+  toast.dismiss();
+
+};
 
   return (
     <>
