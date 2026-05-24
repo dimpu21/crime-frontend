@@ -122,7 +122,7 @@ function App() {
   // 🔥 Load heatmap
 useEffect(() => {
 
-  // fetch("http://10.222.223.215:5000/heatmap")
+  // fetch("https://web-production-44e70.up.railway.app/check-risk"s)
   //   .then(res => res.json())
   //   .then(data => {
   //     setHotspots(data);
@@ -169,7 +169,7 @@ const startTracking = () => {
         setPosition([lat, lng]);
 
         fetch(
-          "http://10.222.223.215:5000/check-risk",
+          "https://web-production-44e70.up.railway.app/check-risk",
           {
             method: "POST",
 
@@ -311,7 +311,7 @@ const startTracking = () => {
     try {
 
       const res = await fetch(
-        "http://10.222.223.215:5000/safe-route",
+        fetch("https://web-production-44e70.up.railway.app/safe-route"),
  {
           method: "POST",
           headers: {
