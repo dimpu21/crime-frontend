@@ -215,7 +215,7 @@ const startTracking = () => {
             );
 
             setFullscreenAlert(
-              false
+              true
             );
 
             toast.error(
@@ -344,7 +344,7 @@ const data = await res.json();
   // 🔥 Stop Emergency Alert
   const stopEmergencyAlert = () => {
 
-    setFullscreenAlert(false);
+    setFullscreenAlert(true);
 
     audioRef.current.pause();
 
