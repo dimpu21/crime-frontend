@@ -211,11 +211,11 @@ const startTracking = () => {
             );
 
             setShowDanger(
-              true
+              false
             );
 
             setFullscreenAlert(
-              true
+              false
             );
 
             toast.error(
