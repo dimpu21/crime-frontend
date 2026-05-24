@@ -122,7 +122,7 @@ function App() {
   // 🔥 Load heatmap
 useEffect(() => {
 
-  // fetch("https://web-production-44e70.up.railway.app/check-risk"s)
+  // fetch("https://web-production-44e70.up.railway.app/heatmap")
   //   .then(res => res.json())
   //   .then(data => {
   //     setHotspots(data);
@@ -311,22 +311,22 @@ const startTracking = () => {
     try {
 
       const res = await fetch(
-        fetch("https://web-production-44e70.up.railway.app/safe-route"),
+ "https://web-production-44e70.up.railway.app/safe-route",
  {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            start_lat: position[0],
-            start_lng: position[1],
-            end_lat: destination[0],
-            end_lng: destination[1]
-          })
-        }
-      );
+   method: "POST",
+   headers: {
+     "Content-Type": "application/json",
+   },
+   body: JSON.stringify({
+     start_lat: position[0],
+     start_lng: position[1],
+     end_lat: destination[0],
+     end_lng: destination[1]
+   })
+ }
+);
 
-      const data = await res.json();
+const data = await res.json();
 
       setRoute(data.safe_route || []);
 
