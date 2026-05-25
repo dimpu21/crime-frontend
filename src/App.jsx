@@ -55,19 +55,19 @@ function HeatmapLayer({ hotspots }) {
     const points = hotspots.map((p) => [
       p.lat,
       p.lng,
-      p.intensity / 3
+      p.intensity
     ]);
 
     const heat = L.heatLayer(points, {
-      radius: 50,
-      blur: 35,
-      maxZoom: 17,
-      minOpacity: 0.4,
+      radius: 65,
+      blur: 30,
+      maxZoom: 18,
+      minOpacity: 0.65,
       gradient: {
-        0.1: "#00ff00",
-        0.3: "#ffff00",
-        0.5: "#ff9900",
-        0.7: "#ff3300",
+        0.2: "#00ff00",
+        0.4: "#ffff00",
+        0.6: "#ff9900",
+        0.8: "#ff3300",
         1.0: "#ff0000"
       }
     });
