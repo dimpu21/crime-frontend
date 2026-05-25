@@ -7,6 +7,9 @@ from telegram import Bot
 from flask_cors import CORS
 import firebase_admin
 import os
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+CHAT_IDS = os.getenv("CHAT_IDS", "").split(",")
 import json
 from firebase_admin import credentials, db
 
@@ -154,27 +157,33 @@ YOU HAVE ENTERED A HIGH RISK CRIME ZONE
 📍 Live Location:
 {maps_link}
 """
+        except Exception as e:
+         print("TELEGRAM ERROR:", e)
+            
+        print("SENDING TELEGRAM ALERT")
+        print("CHAT IDS:", CHAT_IDS)
+        print("MESSAGE:\n", telegram_message)
 
-            print("SENDING TELEGRAM ALERT")
-            print("CHAT IDS:", CHAT_IDS)
-            print("MESSAGE:", telegram_message)
+            # 🔥 TELEGRAM ALERT
 
-            # 🔥 Telegram Alerts
-            for chat_id in CHAT_IDS:
+        for chat_id in CHAT_IDS:
+            try:
+                print("SENDING TO:", chat_id)
 
-                try:
+                response = requests.post(
+                    f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+                    json={
+                        "chat_id": str(chat_id).strip(),
+                        "text": telegram_message
+                    },
+                    timeout=10
+            )
 
-                    response = bot.send_message(
-                        chat_id=chat_id,
-                        text=telegram_message,
-                    
-                    )
+                print("STATUS:", response.status_code)
+                print("BODY:", response.text)
 
-                    print("SUCCESS")
-
-                except Exception as e:
-
-                    print(f"Telegram error for {chat_id}: {e}")
+            except Exception as e:
+                print("TELEGRAM ERROR:", str(e))
                     
 
             print("TELEGRAM ALERT SENT")
@@ -222,9 +231,7 @@ Live Location:
 
             last_alert_time = current_time
 
-        except Exception as e:
-
-            print("ALERT ERROR:", e)
+            
 
     return jsonify({
         "risk": risk,
