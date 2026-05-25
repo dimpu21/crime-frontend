@@ -65,6 +65,7 @@ function HeatmapLayer({ hotspots }) {
 blur: 80,
 maxZoom: 17,
 minOpacity: 0.20,
+max: 10,
 
   gradient: {
   0.15: "#00ff66",
