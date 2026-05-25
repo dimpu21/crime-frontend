@@ -121,16 +121,16 @@ function App() {
   // 🔥 Load heatmap
   // 🔥 Load heatmap
 useEffect(() => {
-
-  // fetch("https://web-production-44e70.up.railway.app/heatmap")
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     setHotspots(data);
-  //     setLoading(false);
-  //   })
-  //   .catch(err => console.log(err));
-
-}, []);
+  fetch(`${import.meta.env.VITE_API_URL}/heatmap`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("HEATMAP DATA:", data);
+      setHotspots(data);
+    })
+    .catch((err) => {
+      console.log("HEATMAP ERROR:", err);
+    });
+}, []); [];
 
   // 🔥 Enable sound manually once
   const enableSound = () => {
