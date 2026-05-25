@@ -128,7 +128,7 @@ useEffect(() => {
       setHotspots(data);
     })
     .catch((err) => {
-      console.log("HEATMAP ERROR:", err);
+      console.log("HEATMAP ERROR:", err)
     });
 }, []); [];
 
