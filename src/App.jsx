@@ -208,6 +208,20 @@ const startTracking = () => {
             "Risk response:",
             data
           );
+          if (data.risk === "High") {
+
+const msg =
+`🚨 EMERGENCY ALERT!
+
+I may be in danger.
+
+Live Location:
+https://maps.google.com/?q=${lat},${lng}`;
+
+window.location.href =
+`https://wa.me/?text=${encodeURIComponent(msg)}`;
+
+}
 
           if (
             data.risk ===
@@ -284,7 +298,7 @@ const startTracking = () => {
           true,
 
         timeout:
-          10000,
+          2500,
 
         maximumAge:
           0
