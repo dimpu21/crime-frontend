@@ -56,27 +56,29 @@ function HeatmapLayer({ hotspots }) {
       }
     });
 
-    const points = hotspots.map((p) => [
-  p.lat,
-  p.lng,
-  (p.intensity || 1) / 3
-]);
+    const points = hotspots
+ .filter(p => p.lat && p.lng)
+ .map((p) => [
+   Number(p.lat),
+   Number(p.lng),
+   0.95
+ ]);
 
     const heat = L.heatLayer(points, {
-  radius: 60,
-  blur: 35,
-  maxZoom: 17,
-  minOpacity: 0.5,
-
-  gradient: {
-    0.1: "#00ff00",
-    0.3: "#ffff00",
-    0.5: "#ff9900",
-    0.7: "#ff3300",
-    1.0: "#ff0000"
-  }
+ radius: 80,
+ blur: 50,
+ maxZoom: 19,
+ minOpacity: 0.7,
+ max: 1.0,
+ gradient: {
+   0.1: "#00ff00",
+   0.4: "#ffff00",
+   0.7: "#ff6600",
+   1.0: "#ff0000"
+ }
 });
     heat.addTo(map);
+    console.log("HEAT LAYER CREATED", points.slice(0,5));
 
     return () => map.removeLayer(heat);
 
