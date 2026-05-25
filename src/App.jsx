@@ -50,34 +50,22 @@ function HeatmapLayer({ hotspots }) {
   useEffect(() => {
     if (!map || !hotspots?.length) return;
     console.log("FIRST HOTSPOT:", hotspots[0]);
-    const points = [];
-
-hotspots.forEach((p)=>{
- const repeats =
-   p.intensity >= 0.8 ? 8 :
-   p.intensity >= 0.5 ? 5 :
-   p.intensity >= 0.3 ? 3 :
-   1;
-
- for(let i=0;i<repeats;i++){
-   points.push([
-     Number(p.lat),
-     Number(p.lng)
-   ]);
- }
-});
+    const points = hotspots.map((p)=>[
+ p.lat,
+ p.lng,
+ 1
+]);
 const heat = L.heatLayer(points,{
- radius:50,
- blur:45,
+ radius:45,
+ blur:40,
  maxZoom:18,
- minOpacity:0.45,
+ minOpacity:0.5,
 
  gradient:{
-   0.1:"#00ff00",
-   0.3:"#ffff66",
-   0.5:"#ffcc00",
-   0.7:"#ff8800",
-   1:"#ff0000"
+ 0.2:"#00ff00",
+ 0.45:"#ffff66",
+ 0.7:"#ff9900",
+ 1:"#ff0000"
  }
 });
     heat.addTo(map);
@@ -134,6 +122,7 @@ useEffect(() => {
     .then((res) => res.json())
     .then((data) => {
       console.log("HEATMAP DATA:", data);
+      console.log("SAMPLE", hotspots.slice(0,10))
       console.log("COUNT:", data.length);
 
    if (Array.isArray(data)) {
