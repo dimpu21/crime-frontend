@@ -132,46 +132,15 @@ useEffect(() => {
       console.log("HEATMAP DATA:", data);
       console.log("COUNT:", data.length);
 
-   if(Array.isArray(data)){
-      <HeatmapLayer hotspots={hotspots} />
-
-{showDanger && (
-<HeatmapLayer
-hotspots={[
-{
-lat: position[0],
-lng: position[1],
-intensity: 100
-},
-{
-lat: position[0]+0.002,
-lng: position[1],
-intensity: 90
-},
-{
-lat: position[0]-0.002,
-lng: position[1],
-intensity: 90
-},
-{
-lat: position[0],
-lng: position[1]+0.002,
-intensity: 90
-},
-{
-lat: position[0],
-lng: position[1]-0.002,
-intensity: 90
+   if (Array.isArray(data)) {
+  setHotspots(data);
+  setLoading(false);
 }
-]}
-/>
-)}
-   }
     })
     .catch((err) => {
       console.log("HEATMAP ERROR:", err)
     });
-}, []); [];
+}, []);
 
   // 🔥 Enable sound manually once
   const enableSound = () => {
