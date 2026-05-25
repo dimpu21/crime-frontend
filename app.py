@@ -82,17 +82,9 @@ def heatmap():
     {
         "lat": lat,
         "lng": lng,
-        "intensity": (
-            1.0 if risk == "High"
-            else 0.6 if risk == "Medium"
-            else 0.2
-        )
+        "intensity": 0.1
     }
-    for lat, lng, risk in zip(
-        data[LAT_COL],
-        data[LNG_COL],
-        
-    )
+    for lat, lng in points
 ]
 
     return jsonify(heat_data)
