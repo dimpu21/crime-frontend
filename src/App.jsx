@@ -52,17 +52,29 @@ function HeatmapLayer({ hotspots }) {
 
     if (!hotspots.length) return;
 
-    const points = hotspots.map((p) => [
-      p.lat,
-      p.lng,
-      p.intensity * 10
-    ]);
+    const points = hotspots.map((p)=>{
+
+ const dist =
+ Math.abs(p.lat - position[0]) +
+ Math.abs(p.lng - position[1]);
+
+ const boost =
+ showDanger && dist < 0.01
+ ? 50
+ : 8;
+
+ return [
+   p.lat,
+   p.lng,
+   p.intensity * boost
+ ];
+});
 
     const heat = L.heatLayer(points, {
-      radius: 120,
-      blur: 60,
+      radius: 180,
+      blur: 80,
       maxZoom: 22,
-      minOpacity: 0.7,
+      minOpacity: 0.85,
       gradient: {
          0.05: "#00ff00",
    0.25: "#ffff00",
