@@ -73,19 +73,19 @@ def send_sms(phone, message):
 
 # ---------------- HEATMAP API ---------------- #
 
-@app.route('/heatmap')
+@app.route("/heatmap")
 def heatmap():
 
     points = data[[LAT_COL, LNG_COL]].dropna().values.tolist()
 
     heat_data = [
-    {
-        "lat": lat,
-        "lng": lng,
-        "intensity": 0.1
-    }
-    for lat, lng in points
-]
+        {
+            "lat": lat,
+            "lng": lng,
+            "intensity": 0.1
+        }
+        for lat, lng in points
+    ]
 
     return jsonify(heat_data)
 
