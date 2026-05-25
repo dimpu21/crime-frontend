@@ -73,6 +73,7 @@ function HeatmapLayer({ hotspots }) {
     });
 
     heat.addTo(map);
+    heat.bringToFront();
 
     return () => map.removeLayer(heat);
 
@@ -480,12 +481,14 @@ url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"            />
 <Circle
   center={position}
   radius={220}
+  interactive={false}
   pathOptions={{
     color: showDanger ? "#d32f2f" : "#2e7d32",
 
 fillColor: showDanger ? "#ef5350" : "#66bb6a",
-    fillOpacity: 0.12,
-    weight: 2
+    fillOpacity: 0.05,
+     opacity:0.5
+    
   }}
 />
           {/* 🔥 SAFE ROUTE */}
