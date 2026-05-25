@@ -50,24 +50,24 @@ function HeatmapLayer({ hotspots }) {
   useEffect(() => {
     if (!map || !hotspots?.length) return;
     console.log("FIRST HOTSPOT:", hotspots[0]);
-    const points = hotspots.map((p)=>[
- p.lat,
- p.lng,
- p.intensity
+    const points = hotspots.map((p,index)=>[
+ Number(p.lat),
+ Number(p.lng),
+ 1
 ]);
 
 const heat = L.heatLayer(points,{
- radius:22,
- blur:12,
- max:0.15,
- maxZoom:18,
- minOpacity:0.6,
+ radius:18,
+ blur:8,
+ maxZoom:17,
+ max:0.03,
+ minOpacity:0.7,
 
  gradient:{
-   0.10:"#00ff00",
-   0.35:"#ffff00",
-   0.65:"#ff8800",
-   1:"#ff0000"
+ 0.1:"#00ff00",
+ 0.4:"#ffff00",
+ 0.7:"#ff8800",
+ 1:"#ff0000"
  }
 });
     heat.addTo(map);
