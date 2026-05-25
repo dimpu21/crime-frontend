@@ -53,21 +53,26 @@ function HeatmapLayer({ hotspots }) {
     const points = hotspots.map((p) => [
   p.lat,
   p.lng,
-  1
+
+  p.risk === "High"
+    ? 1
+    : p.risk === "Medium"
+    ? 0.6
+    : 0.25
 ]);
 
 const heat = L.heatLayer(points, {
-  radius: 25,
-  blur: 20,
-  maxZoom: 17,
-  minOpacity: 0.45,
+  radius: 35,
+blur: 28,
+maxZoom: 17,
+minOpacity: 0.30,
 
-  gradient: {
-    0.2: "#00ff00", // green
-    0.5: "#ffff00", // yellow
-    0.8: "#ff9900", // orange
-    1.0: "#ff0000"  // red
-  }
+gradient: {
+  0.15: "#00ff66",
+  0.45: "#ffff00",
+  0.75: "#ff9900",
+  1.0: "#ff0000"
+}
 });
 
     heat.addTo(map);
