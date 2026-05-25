@@ -46,39 +46,41 @@ function RecenterMap({ position }) {
 // 🔥 Heatmap
 function HeatmapLayer({ hotspots }) {
 
-  const map = useMap();
+ const map = useMap();
 
-  useEffect(() => {
+ useEffect(() => {
 
- if (!map) return;
+   if (!map || !hotspots?.length) return;
 
- map.eachLayer((layer)=>{
-   if(layer._heat){
-     map.removeLayer(layer);
-   }
- });
+   const points = hotspots.map((p) => [
+     Number(p.lat),
+     Number(p.lng),
+     Number(p.intensity || 1)
+   ]);
 
- const points = hotspots.map(p=>[
-   p.lat,
-   p.lng,
-   p.intensity || 1
- ]);
+   const heat = L.heatLayer(points, {
+     radius: 90,
+     blur: 40,
+     maxZoom: 18,
+     minOpacity: 0.5,
+     gradient: {
+       0.2: "#00ff00",
+       0.4: "#ffff00",
+       0.6: "#ff8800",
+       0.8: "#ff3300",
+       1.0: "#ff0000"
+     }
+   });
 
- const heat = L.heatLayer(points,{
-   radius:150,
-   blur:80,
-   maxZoom:22,
-   minOpacity:0.8
- });
+   heat.addTo(map);
 
- heat.addTo(map);
+   return () => {
+     map.removeLayer(heat);
+   };
 
- return ()=>{
-   map.removeLayer(heat);
- };
+ }, [map, hotspots]);
 
-}, [hotspots, risk, position]);
-  return null;
+ return null;
 }
 
 function App() {
