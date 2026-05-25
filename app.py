@@ -80,15 +80,16 @@ def heatmap():
 
     heat_data = [
         {
-            "lat": lat,
-            "lng": lng,
-            "intensity": 0.65
+            "lat": float(lat),
+    "lng": float(lng),
+    "intensity": 0.3
         }
         for lat, lng in points
     ]
+    print("POINTS:", len(points))
+    print("SAMPLE:", heat_data[:5])
 
     return jsonify(heat_data)
-
 # ---------------- CHECK RISK ---------------- #
 
 @app.route('/check-risk', methods=['POST'])
