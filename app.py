@@ -3,24 +3,18 @@ import pandas as pd
 import time
 import math
 import requests
-from telegram import Bot
 from flask_cors import CORS
 import firebase_admin
+from firebase_admin import credentials
 import os
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-
-CHAT_IDS = os.getenv("CHAT_IDS", "").split(",")
 import json
-from firebase_admin import credentials, db
-
+import asyncio
 app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 🔥 Firebase Initialization
-if not firebase_admin._apps:
-
-    firebase_key = os.getenv("FIREBASE_KEY")
+firebase_key = os.getenv("FIREBASE_KEY")
 
 if not firebase_key:
     raise Exception("FIREBASE_KEY not found")
@@ -30,12 +24,12 @@ firebase_config = json.loads(firebase_key)
 cred = credentials.Certificate(firebase_config)
 
 firebase_admin.initialize_app(
-        cred,
-        {
-            "databaseURL":
-            "https://crime-55c96-default-rtdb.asia-southeast1.firebasedatabase.app/"
-        }
-    )
+    cred,
+    {
+        "databaseURL":
+        "https://crime-55c96-default-rtdb.asia-southeast1.firebasedatabase.app/"
+    }
+)
 
 # 🔥 Load dataset
 data = pd.read_csv("processed_crime_data.csv")
@@ -44,8 +38,9 @@ LAT_COL = "LATITUDE"
 LNG_COL = "LONGITUDE"
 
 # 🔥 Telegram setup
-
-print("Telegram initialized")
+CHAT_IDS =os.getenv("CHAT_IDS").split(",")
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+print("Telegram initialized FINAL TEST")
 
 last_alert_time = 0
 
@@ -117,12 +112,11 @@ def check_risk():
 
     current_time = time.time()
 
-    # 🔥 SEND ALERTS
     if risk == "High":
+
         print("ENTERED HIGH RISK BLOCK")
         print("HIGH RISK DETECTED")
         print("CHAT_IDS:", CHAT_IDS)
-        print("SENDING TELEGRAM ALERT")
 
         try:
 
@@ -150,41 +144,49 @@ YOU HAVE ENTERED A HIGH RISK CRIME ZONE
 📍 Live Location:
 {maps_link}
 """
-        except Exception as e:
-         print("TELEGRAM ERROR:", e)
-            
-        print("SENDING TELEGRAM ALERT")
-        print("CHAT IDS:", CHAT_IDS)
-        print("MESSAGE:\n", telegram_message)
+
+            print("SENDING TELEGRAM ALERT")
+            print("CHAT IDS:", CHAT_IDS)
+            print("MESSAGE:\n", telegram_message)
 
             # 🔥 TELEGRAM ALERT
 
-        for chat_id in CHAT_IDS:
-            try:
-                print("SENDING TO:", chat_id)
+            for chat_id in CHAT_IDS:
+                try:
+                    print("SENDING TO:", chat_id)
 
-                response = requests.post(
-                    f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-                    json={
-                        "chat_id": str(chat_id).strip(),
-                        "text": telegram_message
-                    },
-                    timeout=10
-            )
-
-                print("STATUS:", response.status_code)
-                print("BODY:", response.text)
-
-            except Exception as e:
-                print("TELEGRAM ERROR:", str(e))
+                    response = requests.post(
+                        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+                        json={
+                            "chat_id": str(chat_id).strip(),
+                            "text": telegram_message
+                        },
+                        timeout=10
+                    )
                     
+                    print("STATUS:", response.status_code)
+                    print("BODY:", response.text)
+                    print("STATUS:", response.status_code)
+                    print("BODY:", response.text)
 
-            print("TELEGRAM ALERT SENT")
+                    try:
+                       telegram_result = response.json()
+                    except:
+                       telegram_result = {}
 
-            # 🔥 SMS ALERT TO ALL EMERGENCY CONTACTS
+                    if response.status_code == 200 and telegram_result.get("ok") == True:
+                        print("✅ TELEGRAM SENT SUCCESSFULLY")
+                    else:
+                        print("❌ TELEGRAM FAILED")
+                        print("TELEGRAM RESPONSE:", telegram_result)
+                except Exception as e:
+                    print("TELEGRAM ERROR:", str(e))
+
+        
+            # 🔥 SMS ALERT
             try:
 
-                users_ref = db.reference("users")
+                users_ref = ("users")
 
                 users = users_ref.get()
 
@@ -197,15 +199,12 @@ Live Location:
 {maps_link}
 """
 
-                # 🔥 Send SMS to all contacts
                 for user_id, user_data in users.items():
 
                     numbers = [
 
                         user_data.get("emergency1"),
-
                         user_data.get("emergency2"),
-
                         user_data.get("emergency3")
 
                     ]
@@ -214,26 +213,41 @@ Live Location:
 
                         if number:
 
-                            send_sms(number, sms_message)
+                            send_sms(
+                                number,
+                                sms_message
+                            )
 
-                            print(f"SMS SENT TO {number}")
+                            print(
+                                f"SMS SENT TO {number}"
+                            )
 
             except Exception as e:
 
-                print("SMS ERROR:", e)
+                print(
+                    "SMS ERROR:",
+                    e
+                )
 
             last_alert_time = current_time
 
-            
+        except Exception as e:
+
+            print(
+                "ALERT ERROR:",
+                e
+            )
 
     return jsonify({
+
         "risk": risk,
+
         "zone":
         "Danger Zone"
         if risk == "High"
         else "Safe Zone"
-    })
 
+    })
 # ---------------- SAFE ROUTE API ---------------- #
 
 def distance(lat1, lng1, lat2, lng2):
