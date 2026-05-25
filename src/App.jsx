@@ -57,17 +57,17 @@ function HeatmapLayer({ hotspots }) {
 ]);
 
 const heat = L.heatLayer(points,{
- radius:18,
- blur:15,
- max:0.3,
- maxZoom:17,
- minOpacity:0.45,
+ radius:22,
+ blur:12,
+ max:0.15,
+ maxZoom:18,
+ minOpacity:0.6,
 
  gradient:{
-   0.2:"#00ff00",
-   0.5:"#ffff00",
-   0.8:"#ff8800",
-   1.0:"#ff0000"
+   0.10:"#00ff00",
+   0.35:"#ffff00",
+   0.65:"#ff8800",
+   1:"#ff0000"
  }
 });
     heat.addTo(map);
