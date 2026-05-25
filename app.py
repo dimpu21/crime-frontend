@@ -79,13 +79,21 @@ def heatmap():
     points = data[[LAT_COL, LNG_COL]].dropna().values.tolist()
 
     heat_data = [
-        {
-            "lat": lat,
-            "lng": lng,
-            "intensity": 1
-        }
-        for lat, lng in points
-    ]
+    {
+        "lat": lat,
+        "lng": lng,
+        "intensity": (
+            1.0 if risk == "High"
+            else 0.6 if risk == "Medium"
+            else 0.2
+        )
+    }
+    for lat, lng, risk in zip(
+        data[LAT_COL],
+        data[LNG_COL],
+        data["Risk"]
+    )
+]
 
     return jsonify(heat_data)
 
