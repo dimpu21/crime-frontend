@@ -127,41 +127,39 @@ useEffect(() => {
       console.log("COUNT:", data.length);
 
    if(Array.isArray(data)){
-      if (showDanger) {
-  const boosted = [
-    ...data,
-    {
-      lat: position[0],
-      lng: position[1],
-      intensity: 100
-    },
-    {
-      lat: position[0] + 0.002,
-      lng: position[1],
-      intensity: 80
-    },
-    {
-      lat: position[0] - 0.002,
-      lng: position[1],
-      intensity: 80
-    },
-    {
-      lat: position[0],
-      lng: position[1] + 0.002,
-      intensity: 80
-    },
-    {
-      lat: position[0],
-      lng: position[1] - 0.002,
-      intensity: 80
-    }
-  ];
+      <HeatmapLayer hotspots={hotspots} />
 
-  setHotspots(boosted);
-
-} else {
-  setHotspots(data);
+{showDanger && (
+<HeatmapLayer
+hotspots={[
+{
+lat: position[0],
+lng: position[1],
+intensity: 100
+},
+{
+lat: position[0]+0.002,
+lng: position[1],
+intensity: 90
+},
+{
+lat: position[0]-0.002,
+lng: position[1],
+intensity: 90
+},
+{
+lat: position[0],
+lng: position[1]+0.002,
+intensity: 90
+},
+{
+lat: position[0],
+lng: position[1]-0.002,
+intensity: 90
 }
+]}
+/>
+)}
    }
     })
     .catch((err) => {
