@@ -82,7 +82,7 @@ def heatmap():
         {
             "lat": lat,
             "lng": lng,
-            "intensity": 0.1
+            "intensity": 0.6
         }
         for lat, lng in points
     ]
