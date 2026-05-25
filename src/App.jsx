@@ -64,28 +64,35 @@ function HeatmapLayer({ hotspots }) {
  : 8;
 
  return [
-   p.lat,
-   p.lng,
-   p.intensity * boost
+   Number(p.lat),
+ Number(p.lng),
+ 1
  ];
 });
 
-    const heat = L.heatLayer(points, {
-      radius: 180,
-      blur: 80,
-      maxZoom: 22,
-      minOpacity: 0.85,
-      gradient: {
-         0.05: "#00ff00",
-   0.25: "#ffff00",
-   0.45: "#ff8800",
-   0.65: "#ff3300",
-   1.0: "#ff0000"
-      }
-    });
+    const heat = L.heatLayer(points,{
+ radius:250,
+ blur:120,
+ maxZoom:30,
+ minOpacity:0.9,
+
+ gradient:{
+   0.05:"#00ff00",
+   0.2:"#ffff00",
+   0.4:"#ff9900",
+   0.6:"#ff3300",
+   0.8:"#ff0000",
+   1:"#990000"
+ }
+});
 
     heat.addTo(map);
-    heat.bringToFront();
+
+map.on("zoomend",()=>{
+ heat.setOptions({
+   radius: map.getZoom()*12
+ });
+});
 
     return () => map.removeLayer(heat);
 
