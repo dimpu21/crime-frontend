@@ -91,7 +91,7 @@ def heatmap():
     for lat, lng, risk in zip(
         data[LAT_COL],
         data[LNG_COL],
-        data["Risk"]
+        
     )
 ]
 
