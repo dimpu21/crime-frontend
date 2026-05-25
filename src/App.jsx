@@ -55,17 +55,17 @@ function HeatmapLayer({ hotspots }) {
     const points = hotspots.map((p) => [
       p.lat,
       p.lng,
-      p.intensity
+      10
     ]);
 
     const heat = L.heatLayer(points, {
-      radius: 65,
-      blur: 30,
+      radius: 85,
+      blur: 55,
       maxZoom: 18,
-      minOpacity: 0.65,
+      minOpacity: 0.85,
       gradient: {
         0.2: "#00ff00",
-        0.4: "#ffff00",
+        0.3: "#ffff00",
         0.6: "#ff9900",
         0.8: "#ff3300",
         1.0: "#ff0000"
@@ -125,7 +125,11 @@ useEffect(() => {
     .then((res) => res.json())
     .then((data) => {
       console.log("HEATMAP DATA:", data);
+      console.log("COUNT:", data.length);
+
+   if(Array.isArray(data)){
       setHotspots(data);
+   }
     })
     .catch((err) => {
       console.log("HEATMAP ERROR:", err)
