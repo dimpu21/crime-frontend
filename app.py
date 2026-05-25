@@ -44,11 +44,7 @@ LAT_COL = "LATITUDE"
 LNG_COL = "LONGITUDE"
 
 # 🔥 Telegram setup
-CHAT_IDS = 8588859383
 
-bot = Bot(
-    token="8652883076:AAGGE9Bp-4YKS8qFGARkx7ihZAF9S-eDqI8"
-)
 print("Telegram initialized")
 
 last_alert_time = 0
