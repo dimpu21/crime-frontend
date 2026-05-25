@@ -50,55 +50,34 @@ function HeatmapLayer({ hotspots }) {
 
   useEffect(() => {
 
-    if (!hotspots.length) return;
+ if (!map) return;
 
-    const points = hotspots.map((p)=>{
-
- const dist =
- Math.abs(p.lat - position[0]) +
- Math.abs(p.lng - position[1]);
-
- const boost =
- showDanger && dist < 0.01
- ? 50
- : 8;
-
- return [
-   Number(p.lat),
- Number(p.lng),
- 1
- ];
-});
-
-    const heat = L.heatLayer(points,{
- radius:250,
- blur:120,
- maxZoom:30,
- minOpacity:0.9,
-
- gradient:{
-   0.05:"#00ff00",
-   0.2:"#ffff00",
-   0.4:"#ff9900",
-   0.6:"#ff3300",
-   0.8:"#ff0000",
-   1:"#990000"
- }
-});
-
-    heat.addTo(map);
-
-map.on("zoomend",()=>{
- heat.setOptions({
-   radius: map.getZoom()*12
+ map.eachLayer((layer)=>{
+   if(layer._heat){
+     map.removeLayer(layer);
+   }
  });
-});
 
-    return () => map.removeLayer(heat);
+ const points = hotspots.map(p=>[
+   p.lat,
+   p.lng,
+   p.intensity || 1
+ ]);
 
-  }, [hotspots, map]
-);
+ const heat = L.heatLayer(points,{
+   radius:150,
+   blur:80,
+   maxZoom:22,
+   minOpacity:0.8
+ });
 
+ heat.addTo(map);
+
+ return ()=>{
+   map.removeLayer(heat);
+ };
+
+}, [hotspots, risk, position]);
   return null;
 }
 
@@ -521,8 +500,10 @@ url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"            />
 
             <RecenterMap position={position} />
 
-            <HeatmapLayer hotspots={hotspots} />
-
+            <HeatmapLayer
+ key={`${risk}-${position[0]}-${position[1]}`}
+ hotspots={hotspots}
+/>
             {/* 🔥 User Marker */}
             <Marker position={position}>
   <Popup>
