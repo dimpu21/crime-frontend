@@ -122,10 +122,11 @@ def check_risk():
         try:
 
             from datetime import datetime
+            from zoneinfo import ZoneInfo
 
-            current_time_str = datetime.now().strftime(
-                "%d-%m-%Y %I:%M %p"
-            )
+            current_time = datetime.now(
+            ZoneInfo("Asia/Kolkata")
+            ).strftime("%d-%m-%Y %I:%M:%S %p")
 
             maps_link = (
                 f"https://maps.google.com/?q="
@@ -140,7 +141,7 @@ YOU HAVE ENTERED A HIGH RISK CRIME ZONE
 ⚠ MOVE AWAY IMMEDIATELY
 
 🕒 Time:
-{current_time_str}
+{current_time}
 
 📍 Live Location:
 {maps_link}
