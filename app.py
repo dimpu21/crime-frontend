@@ -6,6 +6,7 @@ import requests
 from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials
+from firebase_admin import db
 import os
 import json
 import asyncio
@@ -186,9 +187,10 @@ YOU HAVE ENTERED A HIGH RISK CRIME ZONE
 
         
             # 🔥 SMS ALERT
+            # 🔥 SMS ALERT
             try:
 
-                users_ref = ("users")
+                users_ref = db.reference("/users")
 
                 users = users_ref.get()
 
@@ -201,35 +203,50 @@ Live Location:
 {maps_link}
 """
 
-                for user_id, user_data in users.items():
+                if users:
 
-                    numbers = [
+                    for user_id, user_data in users.items():
 
-                        user_data.get("emergency1"),
-                        user_data.get("emergency2"),
-                        user_data.get("emergency3")
+                        print("USER:", user_id)
 
-                    ]
+                        numbers = [
 
-                    for number in numbers:
+                            user_data.get("emergency1"),
+                            user_data.get("emergency2"),
+                            user_data.get("emergency3")
 
-                        if number:
+                        ]
 
-                            send_sms(
-                                number,
-                                sms_message
-                            )
+                        for number in numbers:
 
-                            print(
-                                f"SMS SENT TO {number}"
-                            )
+                            if number:
+
+                                try:
+
+                                    send_sms(
+                                        str(number),
+                                        sms_message
+                                    )
+
+                                    print(
+                                        f"SMS SENT TO {number}"
+                                    )
+
+                                except Exception as sms_error:
+
+                                    print(
+                                        "SMS FAILED:",
+                                        str(sms_error)
+                                    )
 
             except Exception as e:
 
                 print(
                     "SMS ERROR:",
-                    e
+                    str(e)
                 )
+
+            last_alert_time = current_time
 
             last_alert_time = current_time
 
