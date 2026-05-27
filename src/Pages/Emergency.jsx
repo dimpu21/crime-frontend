@@ -1,114 +1,213 @@
-import React from "react";
+import React, { useState } from "react";
+import { getDatabase, ref, update } from "firebase/database";
 
 const Emergency = () => {
 
-  return (
+const [emergency1, setEmergency1] = useState("");
+const [emergency2, setEmergency2] = useState("");
+const [emergency3, setEmergency3] = useState("");
 
-    <div className="emergency-page">
+const saveContacts = () => {
 
-      <div className="emergency-card">
+try {
 
-        <h1>🚨 Emergency SOS</h1>
+const db = getDatabase();
 
-        <p className="emergency-subtext">
-          Immediate emergency assistance and live safety actions
-        </p>
+update(
+ref(db, "users/8861717294"), // Replace later with logged in user
+{
+emergency1,
+emergency2,
+emergency3
+}
+);
 
-        <button
-  className="police-btn"
-  onClick={() => {
+alert("✅ Emergency contacts saved");
 
-    window.location.href = "tel:100";
+} catch (error) {
 
-    alert("📞 Calling Police...");
-  }}
+console.log(error);
+
+alert("❌ Failed to save");
+
+}
+
+};
+
+return (
+
+<div className="emergency-page">
+
+<div className="emergency-card">
+
+<h1>🚨 Emergency SOS</h1>
+
+<p className="emergency-subtext">
+Immediate emergency assistance and live safety actions
+</p>
+
+{/* Emergency Inputs */}
+
+<input
+type="text"
+placeholder="Emergency Contact 1"
+value={emergency1}
+onChange={(e)=>setEmergency1(e.target.value)}
+/>
+
+<br /><br />
+
+<input
+type="text"
+placeholder="Emergency Contact 2"
+value={emergency2}
+onChange={(e)=>setEmergency2(e.target.value)}
+/>
+
+<br /><br />
+
+<input
+type="text"
+placeholder="Emergency Contact 3"
+value={emergency3}
+onChange={(e)=>setEmergency3(e.target.value)}
+/>
+
+<br /><br />
+
+<button
+onClick={saveContacts}
 >
-  🚓 Call Police
+💾 Save Contacts
 </button>
 
-        <button
-  className="sos-btn"
-  onClick={() => {
+<br /><br />
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
+{/* Call Police */}
 
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+<button
+className="police-btn"
+onClick={() => {
 
-        const mapsLink =
-          `https://maps.google.com/?q=${lat},${lng}`;
+window.location.href = "tel:100";
 
-        const message =
-          `🚨 EMERGENCY SOS!\n\nI need help.\nMy live location:\n${mapsLink}`;
+alert("📞 Calling Police...");
 
-        const whatsappURL =
-          `https://wa.me/?text=${encodeURIComponent(message)}`;
-
-        window.open(whatsappURL, "_blank");
-      },
-
-      () => {
-        alert("Location access denied");
-      }
-    );
-  }}
+}}
 >
-  🚨 Send SOS
+🚓 Call Police
 </button>
 
-        <button
-  className="location-btn"
-  onClick={() => {
+<br /><br />
 
-    navigator.geolocation.getCurrentPosition(
+{/* SOS */}
 
-      (position) => {
+<button
+className="sos-btn"
+onClick={() => {
 
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+navigator.geolocation.getCurrentPosition(
 
-        const mapsLink =
-          `https://maps.google.com/?q=${lat},${lng}`;
+(position) => {
 
-        const message =
-          `📍 My Live Location:\n${mapsLink}`;
+const lat = position.coords.latitude;
+const lng = position.coords.longitude;
 
-        const whatsappURL =
-          `https://wa.me/?text=${encodeURIComponent(message)}`;
+const mapsLink =
+`https://maps.google.com/?q=${lat},${lng}`;
 
-        window.open(whatsappURL, "_blank");
-      },
+const message =
+`🚨 EMERGENCY SOS!\n\nI need help.\nMy live location:\n${mapsLink}`;
 
-      () => {
-        alert("Location access denied");
-      }
-    );
-  }}
+const whatsappURL =
+`https://wa.me/?text=${encodeURIComponent(message)}`;
+
+window.open(
+whatsappURL,
+"_blank"
+);
+
+},
+
+() => {
+
+alert("Location access denied");
+
+}
+
+);
+
+}}
 >
-  📍 Share Live Location
+🚨 Send SOS
 </button>
 
-        <div className="emergency-footer">
+<br /><br />
 
-          <div className="footer-box">
-            🚑 Ambulance : 108
-          </div>
+{/* Share Location */}
 
-          <div className="footer-box">
-            👩 Women Safety : 1091
-          </div>
+<button
+className="location-btn"
+onClick={() => {
 
-          <div className="footer-box">
-            🚓 Police : 100
-          </div>
+navigator.geolocation.getCurrentPosition(
 
-        </div>
+(position)=>{
 
-      </div>
+const lat =
+position.coords.latitude;
 
-    </div>
-  );
+const lng =
+position.coords.longitude;
+
+const mapsLink =
+`https://maps.google.com/?q=${lat},${lng}`;
+
+const message =
+`📍 My Live Location:\n${mapsLink}`;
+
+window.open(
+`https://wa.me/?text=${encodeURIComponent(message)}`,
+"_blank"
+);
+
+},
+
+()=>{
+
+alert("Location access denied");
+
+}
+
+);
+
+}}
+>
+📍 Share Live Location
+</button>
+
+<div className="emergency-footer">
+
+<div className="footer-box">
+🚑 Ambulance : 108
+</div>
+
+<div className="footer-box">
+👩 Women Safety : 1091
+</div>
+
+<div className="footer-box">
+🚓 Police : 100
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+);
+
 };
 
 export default Emergency;
