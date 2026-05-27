@@ -188,11 +188,9 @@ YOU HAVE ENTERED A HIGH RISK CRIME ZONE
         
             # 🔥 SMS ALERT
             # 🔥 SMS ALERT
+            # 🔥 SMS ALERT
+            # 🔥 SMS ALERT
             try:
-
-                users_ref = db.reference("/users")
-
-                users = users_ref.get()
 
                 sms_message = f"""
 EMERGENCY ALERT!
@@ -203,49 +201,76 @@ Live Location:
 {maps_link}
 """
 
-                if users:
+                phone = str(
+                    request.get_json().get(
+                        "phone",
+                        ""
+                    )
+                ).strip()
 
-                    for user_id, user_data in users.items():
+                if phone:
 
-                        print("USER:", user_id)
+                    user_ref = db.reference(
+                        f"/users/{phone}"
+                    )
+
+                    user_data = user_ref.get()
+
+                    if user_data:
+
+                        print(
+                            "USER:",
+                            phone
+                        )
 
                         numbers = [
 
-                            user_data.get("emergency1"),
-                            user_data.get("emergency2"),
-                            user_data.get("emergency3")
+                            user_data.get(
+                                "emergency1"
+                            ),
 
+                            user_data.get(
+                                "emergency2"
+                            ),
+
+                            user_data.get(
+                                "emergency3"
+                            )
                         ]
 
                         for number in numbers:
 
                             if number:
 
-                                try:
+                                send_sms(
 
-                                    send_sms(
-                                        str(number),
-                                        sms_message
-                                    )
+                                    str(number),
 
-                                    print(
-                                        f"SMS SENT TO {number}"
-                                    )
+                                    sms_message
+                                )
 
-                                except Exception as sms_error:
+                                print(
+                                    f"SMS SENT TO {number}"
+                                )
 
-                                    print(
-                                        "SMS FAILED:",
-                                        str(sms_error)
-                                    )
+                    else:
 
-            except Exception as e:
+                        print(
+                            "USER NOT FOUND"
+                        )
+
+                else:
+
+                    print(
+                        "PHONE NOT RECEIVED"
+                    )
+
+            except Exception as sms_error:
 
                 print(
                     "SMS ERROR:",
-                    str(e)
+                    str(sms_error)
                 )
-
             last_alert_time = current_time
 
             last_alert_time = current_time
