@@ -7,3 +7,4 @@ python-telegram-bot
 firebase-admin
 scikit-learn
 gunicorn
+python-dotenv
