@@ -15,7 +15,11 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 🔥 Firebase Initialization
-cred = credentials.Certificate("firebase-key.json")
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+cred = credentials.Certificate(os.path.join(BASE_DIR, "firebase-key.json"))
 firebase_admin.initialize_app(
     cred,
     {
@@ -25,8 +29,11 @@ firebase_admin.initialize_app(
 )
 
 # 🔥 Load dataset
-data = pd.read_csv("processed_crime_data.csv")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+data = pd.read_csv(
+    os.path.join(BASE_DIR, "processed_crime_data.csv")
+)
 LAT_COL = "LATITUDE"
 LNG_COL = "LONGITUDE"
 
