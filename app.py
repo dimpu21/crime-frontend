@@ -43,6 +43,14 @@ CHAT_IDS = ["8588859383"]
 print("Telegram initialized FINAL TEST")
 
 last_alert_time = 0
+# ---------------- HOME ---------------- #
+
+@app.route("/")
+def home():
+    return jsonify({
+        "message": "Crime Hotspot Detection API is running successfully!",
+        "status": "OK"
+    })
 
 # ---------------- SEND SMS FUNCTION ---------------- #
 
