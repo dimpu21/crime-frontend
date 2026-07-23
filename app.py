@@ -38,8 +38,8 @@ LAT_COL = "LATITUDE"
 LNG_COL = "LONGITUDE"
 
 # 🔥 Telegram setup
-CHAT_IDS =os.getenv("CHAT_IDS").split(",")
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = "8652883076:AAGGE9Bp-4YKS8qFGARkx7ihZAF9S-eDqI8"
+CHAT_IDS = ["8588859383"]
 print("Telegram initialized FINAL TEST")
 
 last_alert_time = 0
