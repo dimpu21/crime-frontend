@@ -15,15 +15,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 🔥 Firebase Initialization
-firebase_key = os.getenv("FIREBASE_KEY")
-
-if not firebase_key:
-    raise Exception("FIREBASE_KEY not found")
-
-firebase_config = json.loads(firebase_key)
-
-cred = credentials.Certificate(firebase_config)
-
+cred = credentials.Certificate("firebase-key.json")
 firebase_admin.initialize_app(
     cred,
     {
