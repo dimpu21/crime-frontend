@@ -28,6 +28,7 @@ import "./App.css";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const API = import.meta.env.VITE_API_URL;
 
 // 🔁 Smooth map movement
 function RecenterMap({ position }) {
@@ -181,7 +182,7 @@ const startTracking = () => {
         setPosition([lat, lng]);
 
         fetch(
-          "https://web-production-44e70.up.railway.app/check-risk",
+  `${API}/check-risk`,
           {
             method: "POST",
 
@@ -337,21 +338,18 @@ const startTracking = () => {
 
     try {
 
-      const res = await fetch(
- "https://web-production-44e70.up.railway.app/safe-route",
- {
-   method: "POST",
-   headers: {
-     "Content-Type": "application/json",
-   },
-   body: JSON.stringify({
-     start_lat: position[0],
-     start_lng: position[1],
-     end_lat: destination[0],
-     end_lng: destination[1]
-   })
- }
-);
+      const res = await fetch(`${API}/safe-route`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    start_lat: position[0],
+    start_lng: position[1],
+    end_lat: destination[0],
+    end_lng: destination[1],
+  }),
+});
 
 const data = await res.json();
 
